@@ -8,6 +8,7 @@ class TasksSchema(BaseModel):
    description: str = Field(...)
    status: str = Field(...)
    priority: str = Field(...)
+   due_date: Union[datetime, None] = None
    created_time: Union[datetime, None] = None
    updated_time: Optional[str]
 
@@ -19,6 +20,7 @@ class TasksSchema(BaseModel):
                "description":"Read a book on entreprenurship for 2 hours",
                "status":"completed",
                "priority":"1",
+               "due_date": "2023-09-10T23:23:35.403+00:00",
                "created_at":"2023-09-10T23:23:35.403+00:00",
                "updated_at":"2023-09-10T23:23:35.403+00:00"
             }
