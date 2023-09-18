@@ -3,7 +3,7 @@ from typing import Optional, Union
 from datetime import datetime
 
 
-class Tasks(BaseModel):
+class TasksSchema(BaseModel):
    name: str = Field(...)
    description: str = Field(...)
    status: str = Field(...)
