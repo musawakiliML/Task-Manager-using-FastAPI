@@ -2,6 +2,8 @@ from fastapi import FastAPI, status
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from app.server.api.v1.endpoints.tasks import router as TasksRouter
+
 app = FastAPI()
 
 app.add_middleware(
@@ -11,6 +13,9 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Application routes
+app.include_router(TasksRouter, tags=["Tasks Management"], prefix="/tasks")
 
 @app.get("/")
 async def task_app():
