@@ -20,5 +20,4 @@ app.include_router(TasksRouter, tags=["Tasks Management"], prefix="/tasks")
 @app.get("/")
 async def task_app():
    content = {"Message": "Your Task Manager for Daily Productivity...."}
-   
    return JSONResponse(content=content, status_code=status.HTTP_200_OK)

@@ -1,6 +1,8 @@
-from fastapi import APIRouter, status, HTTPException, Form
+from fastapi import APIRouter, status, HTTPException, Form, Body
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+from datetime import datetime, time, timedelta
+from typing import Annotated
 
 from app.server.database.crud import (
     create_task
@@ -13,7 +15,8 @@ router = APIRouter()
 
 # Create task route
 @router.post("/", status_code=status.HTTP_201_CREATED, response_model=TasksSchema)
-async def create_task(name: str=Form(defaut="Reading"), description: str=Form(default="read 50 pages of steal like an artist"), task_status: str=Form(default="completed"), priority: str=Form(default="p1"), due_date: str=Form(default="12-12-2022")):
+async def create_task(name: str=Form(defaut="Reading"), description: str=Form(default="read 50 pages of steal like an artist"), task_status: str=Form(default="completed"), priority: str=Form(default="p1"), due_date: Annotated[datetime | None, Body()]=Form()):
+    created_date = ""
     # Create task function
     schema = TasksSchema(
         name=name,

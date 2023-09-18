@@ -19,7 +19,7 @@ class TasksSchema(BaseModel):
                "name":"Read a Book",
                "description":"Read a book on entreprenurship for 2 hours",
                "status":"completed",
-               "priority":"1",
+               "priority":"p1",
                "due_date": "2023-09-10T23:23:35.403+00:00",
                "created_at":"2023-09-10T23:23:35.403+00:00",
                "updated_at":"2023-09-10T23:23:35.403+00:00"
