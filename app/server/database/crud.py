@@ -5,9 +5,10 @@ from app.server.models.tasks import TasksSchema
 
 # Create task
 async def create_task(task: TasksSchema):
+    task = task.model_dump()
     try:
-        new_task = await tasks.insert_one(tasks)
-        get_new_task = await tasks.find_one(new_task.inserted_id)
+        new_task = await tasks.insert_one(task)
+        get_new_task = await tasks.find_one({"_id": new_task.inserted_id})
         return get_new_task
     except Exception as e:
         return {"Error_message":str(e)}    

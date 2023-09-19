@@ -14,19 +14,30 @@ from app.server.models.tasks import (
 router = APIRouter()
 
 # Create task route
-@router.post("/", status_code=status.HTTP_201_CREATED, response_model=TasksSchema)
-async def create_task(name: str=Form(defaut="Reading"), description: str=Form(default="read 50 pages of steal like an artist"), task_status: str=Form(default="completed"), priority: str=Form(default="p1"), due_date: Annotated[datetime | None, Body()]=Form()):
-    created_date = ""
-    # Create task function
-    schema = TasksSchema(
-        name=name,
-        description=description,
-        status=task_status,
-        priority=priority,
-        due_date=due_date
-    )
-    new_task = await create_task(schema)
+@router.post("/", response_model=TasksSchema, response_description="Creating A Task")
+async def create_task(name: str=Form(default="Reading"), description: str=Form(default="read 50 pages of steal like an artist"), task_status: str=Form(default="completed"), priority: str=Form(default="p1"), task_due_date: str=Form(default="today")):
+    try:
+        created_date = datetime.utcnow()
+        # due_date = datetime.strptime(due_date, '%Y-%m-%d')
+        # print(due_date)
+        # Create task function
+        schema = TasksSchema(
+            name=str(name),
+            description=str(description),
+            status=str(task_status),
+            priority=str(priority),
+            due_date=str(task_due_date),
+            created_time=str(created_date),
+            updated_time=None
+        )
+        print("Inside try before new task")
+        new_task = await create_task(schema)
+        
+        print("After creating new task")
 
-    response = jsonable_encoder(new_task)
+        response = jsonable_encoder(new_task)
 
-    return JSONResponse(content=response, status_code=status.HTTP_201_CREATED)
+        return JSONResponse(content=response, status_code=status.HTTP_201_CREATED)
+    except Exception as e:
+        return HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+    

@@ -23,4 +23,4 @@ database = client.tasks_api
 
 # Database Collections
 
-tasks = database.get_collection("tasks")
+tasks = database.get_collection("tasks_collection")
