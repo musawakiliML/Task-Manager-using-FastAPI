@@ -6,11 +6,11 @@ from datetime import datetime
 class TasksSchema(BaseModel):
    name: str = Field(...)
    description: str = Field(...)
-   status: str = Field(...)
+   task_status: str = Field(...)
    priority: str = Field(...)
    due_date: str = Field(...)
-   created_time: Union[datetime, None] = None
-   updated_time: Optional[str]
+   created_at: Union[datetime, None] = None
+   updated_at: Union[datetime, None] = None
 
    class Config:
       json_schema_extra = {
@@ -18,7 +18,7 @@ class TasksSchema(BaseModel):
             {
                "name":"Read a Book",
                "description":"Read a book on entreprenurship for 2 hours",
-               "status":"completed",
+               "task_status":"completed",
                "priority":"p1",
                "due_date": "2023-09-10",
                "created_at":"2023-09-10T23:23:35.403+00:00",
