@@ -12,8 +12,14 @@ async def create_task_db(task: TasksSchema):
         get_new_task = await tasks.find_one({"_id": new_task.inserted_id})
         return get_new_task
     except Exception as e:
-        return {"Error_message":str(e)}    
+        return {"Error_message":str(e)}
+
 # Get one task
+async def get_single_task(id: str):
+    try:
+        pass
+    except Exception as e:
+        return {"Error_message": str(e)}
 # Get all tasks
 # Update one task
 # Delete one task
