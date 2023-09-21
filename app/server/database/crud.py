@@ -1,5 +1,6 @@
 from app.server.database.database_connection import tasks
 from app.server.models.tasks import TasksSchema
+from bson.objectid import ObjectId
 
 # Create the necessary endpoints to handle CRUD operations for tasks (Create, Read, Update, Delete).
 
@@ -15,11 +16,14 @@ async def create_task_db(task: TasksSchema):
         return {"Error_message":str(e)}
 
 # Get one task
-async def get_single_task(id: str):
+async def get_single_task_db(id: str):
     try:
-        pass
+        task = await tasks.find_one({"_id":ObjectId(id)})
+        if task:
+            return task
     except Exception as e:
         return {"Error_message": str(e)}
+
 # Get all tasks
 # Update one task
 # Delete one task
