@@ -49,9 +49,18 @@ async def create_task(name: Annotated[str, Form()],
 @router.get("/{id}", response_model=TasksSchema, response_description="Get Single Task")
 async def get_single_task(id: str):
     get_task = await get_single_task_db(id)
-    
     try:
         if get_task:
-            response =
+            response = TasksSchema(
+                name=get_task["name"],
+                description=get_task["description"],
+                task_status=get_task["task_status"],
+                priority=get_task["priority"],
+                due_date=get_task["due_date"],
+                created_at=get_task["created_at"],
+                updated_at=get_task["updated_at"]
+            )
+            response = jsonable_encoder(response)
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
