@@ -2,11 +2,12 @@ from fastapi import APIRouter, status, HTTPException, Form, Body
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime, time, timedelta
-from typing import Annotated, Any
+from typing import Annotated, Any, List
 
 from app.server.database.crud import (
     create_task_db,
-    get_single_task_db
+    get_single_task_db,
+    get_all_tasks_db
 )
 from app.server.models.tasks import (
     TasksSchema
@@ -48,8 +49,8 @@ async def create_task(name: Annotated[str, Form()],
 # Get Single Task
 @router.get("/{id}", response_model=TasksSchema, response_description="Get Single Task")
 async def get_single_task(id: str):
-    get_task = await get_single_task_db(id)
     try:
+        get_task = await get_single_task_db(id)
         if get_task:
             response = TasksSchema(
                 name=get_task["name"],
@@ -61,6 +62,20 @@ async def get_single_task(id: str):
                 updated_at=get_task["updated_at"]
             )
             response = jsonable_encoder(response)
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+# Get all Tasks
+@router.get("/", response_model=List[TasksSchema], response_description="Get all Tasks")
+async def get_all_tasks():
+    try:
+        get_all_tasks = await get_all_tasks_db()
+        if get_all_tasks:
+
+            print(get_all_tasks)
+            response = "Successful"
         return JSONResponse(content=response, status_code=status.HTTP_200_OK)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

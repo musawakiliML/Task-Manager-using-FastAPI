@@ -25,6 +25,13 @@ async def get_single_task_db(id: str):
         return {"Error_message": str(e)}
 
 # Get all tasks
+async def get_all_tasks_db():
+    try:
+        get_all_tasks = await tasks.find()
+        if get_all_tasks:
+            return get_all_tasks
+    except Exception as e:
+        return {"Error_message": str(e)}
 # Update one task
 # Delete one task
 # Delete all tasks
