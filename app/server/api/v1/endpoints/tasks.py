@@ -3,12 +3,15 @@ from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
 from datetime import datetime, time, timedelta
 from typing import Annotated, Any, List
+from bson.objectid import ObjectId
 
 from app.server.database.crud import (
     create_task_db,
     get_single_task_db,
-    get_all_tasks_db
+    get_all_tasks_db,
+    update_single_task_db
 )
+from app.server.database.database_connection import tasks
 from app.server.models.tasks import (
     TasksSchema
 )
@@ -87,5 +90,14 @@ async def get_all_tasks():
                 all_tasks_list.append(task_data)
             response = jsonable_encoder(all_tasks_list)
         return JSONResponse(content=response, status_code=status.HTTP_200_OK)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+# Update Single Task
+@router.put("/{id}", response_model=TasksSchema, response_description="Update Single Task")
+async def update_single_task(task_id: str, task: TasksSchema):
+    try:
+        get_task = await tasks.find_one({"_id":ObjectId(id)})
+        print(get_task)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))

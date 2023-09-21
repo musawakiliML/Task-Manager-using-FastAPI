@@ -35,6 +35,16 @@ async def get_all_tasks_db():
             return task_data
     except Exception as e:
         return {"Error_message": str(e)}
+
 # Update one task
+async def update_single_task_db(id: str, task_data: TasksSchema):
+    task = task_data.model_dump()
+    try:
+        update_task = await tasks.update_one({"_id":ObjectId(id)}, {"$set":{task}})
+        if update_task:
+            get_task = await tasks.find_one({"_id":ObjectId(id)})
+            return get_task
+    except Exception as e:
+        return {"Error_message": str(e)}
 # Delete one task
 # Delete all tasks
