@@ -26,10 +26,13 @@ async def get_single_task_db(id: str):
 
 # Get all tasks
 async def get_all_tasks_db():
+    task_data = []
     try:
-        get_all_tasks = await tasks.find()
+        get_all_tasks = tasks.find()
         if get_all_tasks:
-            return get_all_tasks
+            async for task in get_all_tasks:
+                task_data.append(task)
+            return task_data
     except Exception as e:
         return {"Error_message": str(e)}
 # Update one task

@@ -70,12 +70,22 @@ async def get_single_task(id: str):
 # Get all Tasks
 @router.get("/", response_model=List[TasksSchema], response_description="Get all Tasks")
 async def get_all_tasks():
+    all_tasks_list = []
     try:
         get_all_tasks = await get_all_tasks_db()
         if get_all_tasks:
-
-            print(get_all_tasks)
-            response = "Successful"
+            for task in get_all_tasks:
+                task_data = TasksSchema(
+                    name=task["name"],
+                    description=task["description"],
+                    task_status=task["task_status"],
+                    priority=task["priority"],
+                    due_date=task["due_date"],
+                    created_at=task["created_at"],
+                    updated_at=task["updated_at"]
+                )
+                all_tasks_list.append(task_data)
+            response = jsonable_encoder(all_tasks_list)
         return JSONResponse(content=response, status_code=status.HTTP_200_OK)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
