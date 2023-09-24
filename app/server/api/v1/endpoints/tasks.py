@@ -97,7 +97,7 @@ async def get_all_tasks():
 
 # Update Single Task
 @router.put("/{id}", response_model=TasksSchema, response_description="Update Single Task")
-async def update_single_task(task_id: str, task: UpdateTasksSchema = Body(...)):
+async def update_single_task(id: str, task: UpdateTasksSchema = Body(...)):
     try:
         # get_task = await tasks.find_one({"_id":ObjectId(id)})
         task = task.model_dump()
@@ -110,7 +110,7 @@ async def update_single_task(task_id: str, task: UpdateTasksSchema = Body(...)):
             due_date=task['due_date'],
             updated_at=str(updated_at)
         )
-        update_task = await update_single_task_db(task_id, updated_task)
+        update_task = await update_single_task_db(id, updated_task)
         if update_task:
             response = TasksSchema(
                 name=update_task["name"],
@@ -125,3 +125,12 @@ async def update_single_task(task_id: str, task: UpdateTasksSchema = Body(...)):
         return JSONResponse(content=response, status_code=status.HTTP_200_OK) 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
+
+@router.delete("/{id}", response_description="Delete a Single Task")
+async def delete_single_task(id: str):
+    pass
+
+@router.delete("/", response_description="Delete all Tasks")
+async def delete_single_task(id: str):
+    pass
