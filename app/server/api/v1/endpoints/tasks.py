@@ -89,6 +89,7 @@ async def get_all_tasks():
                 )
                 all_tasks_list.append(task_data)
             response = jsonable_encoder(all_tasks_list)
+            print(response)
         return JSONResponse(content=response, status_code=status.HTTP_200_OK)
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
