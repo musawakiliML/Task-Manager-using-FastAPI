@@ -1,5 +1,5 @@
 from app.server.database.database_connection import tasks
-from app.server.models.tasks import TasksSchema
+from app.server.models.tasks import TasksSchema, UpdateTasksSchema
 from bson.objectid import ObjectId
 
 # Create the necessary endpoints to handle CRUD operations for tasks (Create, Read, Update, Delete).
@@ -37,10 +37,17 @@ async def get_all_tasks_db():
         return {"Error_message": str(e)}
 
 # Update one task
-async def update_single_task_db(id: str, task_data: TasksSchema):
+async def update_single_task_db(id: str, task_data: UpdateTasksSchema):
     task = task_data.model_dump()
     try:
-        update_task = await tasks.update_one({"_id":ObjectId(id)}, {"$set":{task}})
+        update_task = await tasks.update_one({"_id":ObjectId(id)}, {"$set":{
+            "name":task["name"],
+            "description": task["description"],
+            "priority": task["priority"],
+            "task_status": task["task_status"],
+            "due_date": task["due_date"],
+            "updated_at": task["updated_at"]
+        }})
         if update_task:
             get_task = await tasks.find_one({"_id":ObjectId(id)})
             return get_task

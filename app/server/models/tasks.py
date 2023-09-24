@@ -27,3 +27,23 @@ class TasksSchema(BaseModel):
          ]
       }
 
+class UpdateTasksSchema(BaseModel):
+   name: str = Field(...)
+   description: str = Field(...)
+   task_status: str = Field(...)
+   priority: str = Field(...)
+   due_date: str = Field(...)
+   updated_at: Union[datetime, None] = None
+
+   class Config:
+      json_schema_extra = {
+         "example": [
+            {
+               "name":"Read a Book",
+               "description":"Read a book on entreprenurship for 2 hours",
+               "task_status":"completed",
+               "priority":"p1",
+               "due_date": "2023-09-10",
+            }
+         ]
+      }

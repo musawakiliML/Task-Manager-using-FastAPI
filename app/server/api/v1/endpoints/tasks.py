@@ -13,7 +13,8 @@ from app.server.database.crud import (
 )
 from app.server.database.database_connection import tasks
 from app.server.models.tasks import (
-    TasksSchema
+    TasksSchema,
+    UpdateTasksSchema
 )
 
 router = APIRouter()
@@ -96,9 +97,31 @@ async def get_all_tasks():
 
 # Update Single Task
 @router.put("/{id}", response_model=TasksSchema, response_description="Update Single Task")
-async def update_single_task(task_id: str, task: TasksSchema):
+async def update_single_task(task_id: str, task: UpdateTasksSchema = Body(...)):
     try:
-        get_task = await tasks.find_one({"_id":ObjectId(id)})
-        print(get_task)
+        # get_task = await tasks.find_one({"_id":ObjectId(id)})
+        task = task.model_dump()
+        updated_at = datetime.utcnow()
+        updated_task = UpdateTasksSchema(
+            name=task['name'],
+            description=task['description'],
+            task_status=task['task_status'],
+            priority=task['priority'],
+            due_date=task['due_date'],
+            updated_at=str(updated_at)
+        )
+        update_task = await update_single_task_db(task_id, updated_task)
+        if update_task:
+            response = TasksSchema(
+                name=update_task["name"],
+                description=update_task["description"],
+                task_status=update_task["task_status"],
+                priority=update_task["priority"],
+                due_date=update_task["due_date"],
+                created_at=update_task["created_at"],
+                updated_at=update_task["updated_at"]
+            )
+            response = jsonable_encoder(response)
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK) 
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
