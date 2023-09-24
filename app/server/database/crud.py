@@ -53,5 +53,19 @@ async def update_single_task_db(id: str, task_data: UpdateTasksSchema):
             return get_task
     except Exception as e:
         return {"Error_message": str(e)}
+    
 # Delete one task
+async def delete_single_task_db(id: str):
+    try:
+        result = await tasks.delete_one({"_id":ObjectId(id)})
+        return {"message":"Successfully Deleted task", "result":result}
+    except Exception as e:
+        return {"Error_message": str(e)}
+
 # Delete all tasks
+async def delete_all_tasks_db():
+    try:
+        result = await tasks.delete_many({})
+        return {"message":"All Database Deleted"}
+    except Exception as e:
+        return {"Error_message": str(e)}

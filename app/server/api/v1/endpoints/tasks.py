@@ -9,7 +9,9 @@ from app.server.database.crud import (
     create_task_db,
     get_single_task_db,
     get_all_tasks_db,
-    update_single_task_db
+    update_single_task_db,
+    delete_single_task_db,
+    delete_all_tasks_db
 )
 from app.server.database.database_connection import tasks
 from app.server.models.tasks import (
@@ -129,8 +131,27 @@ async def update_single_task(id: str, task: UpdateTasksSchema = Body(...)):
 
 @router.delete("/{id}", response_description="Delete a Single Task")
 async def delete_single_task(id: str):
-    pass
+    try:
+        delete_task = await delete_single_task_db(id)
+
+        response = {"Message": f"Task with Id:{id} is Successfuly Deleted!!"}
+
+        response = jsonable_encoder(response)
+
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK) 
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
+
 
 @router.delete("/", response_description="Delete all Tasks")
-async def delete_single_task(id: str):
-    pass
+async def delete_all_tasks():
+    try:
+        delete = await delete_all_tasks_db()
+
+        response = {"Message": f"All Tasks Successfuly Deleted!!"}
+
+        response = jsonable_encoder(response)
+
+        return JSONResponse(content=response, status_code=status.HTTP_200_OK) 
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail=str(e))
