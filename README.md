@@ -49,4 +49,3 @@ Task Manager: Create an API for managing tasks, allowing users to create, read, 
    - Implement pagination for retrieving a limited number of tasks per request.
    - Add sorting and filtering options to allow users to retrieve tasks based on specific criteria.
    - Provide the ability to mark tasks as completed or in progress.
-
